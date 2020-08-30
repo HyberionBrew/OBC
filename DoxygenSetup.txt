@@ -1,0 +1,36 @@
+1. Download -> http://www.doxygen.nl/download.html
+2. open a terminal in the folder you are working in (shift+right click--> open Terminal or PowerShell)
+3. type: doxygen -g 
+	a. Alternatively you can just copy my "Doxyfile" from the cloud!
+	WARNING: your folder with the source code will need to be called sw, you can change just INPUT, see 4.
+
+4. open the generated doxygen file (called Doxyfile as default) (e.g. Notepad)
+	a. change PROJECT_NAME = CubeSat
+	b. RECURSIVE = YES
+	c. OUTPUT_DIRECTORY = doc (or whatever you want to call it)
+	d. INPUT = sw (or wherever your code is)
+	e. OPTIMIZE_OUTPUT_C = YES
+
+4. Document your code in the doxygen style! (see http://fnch.users.sourceforge.net/doxygen_c.html for more details)
+the documentation should at least contain [optionals], () -->recommended if not really simple:
+	a. for every file:
+		/** @file filename  		
+	    	* @brief this is a brief description 	
+	    	* [@author xy
+		* @date xy]
+		* 
+		* @details Longer description
+		*/ 
+	b. for functions:
+		/**
+ 		* @brief brief descr
+ 		* 
+		* @details (Longer description)
+ 		* @param paramname1 descr
+		* @param paramname2 descr
+		* ....
+ 		* @return descr of return value
+		*/
+6. Now you can generate the docs with: doxygen Doxyfile (in Terminal!)
+	a. The warnings should show you code that isn't document/not formated well!
+7. you can view the generated output if you open doc/html/index.html, alternatively you can build a .pdf from latex source.

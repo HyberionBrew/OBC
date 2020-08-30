@@ -1,0 +1,65 @@
+•	In larger routines, use single entry and exit points in subprograms.  Multiple entry or exit points introduce control flow uncertainties.  In small subprograms, multiple exit points may actually make the routine more readable, and should be allowed.  Document any secondary entry and exit points. 
+•	Use data typing.  If the language does not enforce it, include it in the coding standards and look for it during formal inspections. 
+•	Use parentheses to specify precedence order, rather than relying on the order inherent in the language.  Assumptions about precedence often lead to errors, and the source code can be misinterpreted when reviewing it. 
+•	Avoid functions or procedures with side effects.  Side effects can lead to unplanned dependencies, and ultimately to bugs. 
+•	 Separate assignments from evaluation statements.  Mixing them can cause unanticipated side effects.  An example of a mixed assignment/evaluation statement is:   y = toupper(x=getchar()); // x=getchar() should be on separate line 
+•	Minimize dynamic binding.  Dynamic binding is a necessary part of polymorphism.  When used, it should be justified.  Keep in mind that it causes unpredictability in name/class association and reduces run-time predictability. 
+•	Be careful when using operator overloading.  While it can help achieve uniformity across different data types (which is good), it can also confuse the reader (and programmers) if used in a non-intuitive way.   
+•	Use tasking with care.  While it adds many good features to programs (e.g. splitting the work into logical units, each of which can be tested independently),  it can also lead to timing uncertainties, sequence of execution uncertainties, vulnerability to race conditions, and deadlocks.   
+•	Minimize the use of interrupt driven processing.  Interrupts lead to non-deterministic response times, which is very important in real-time systems.  The best way to handle this is to have the interrupt processing do the bare minimum, and return to primary program control as soon as possible.  Check how the operating system does time slicing (usually using clock interrupts), and what overhead or problems may be inherent in their implementation.
+•	 Handle exceptions locally, when possible.  Local exception handling helps isolate problems more easily and more accurately.  If it is not possible to do this, then thorough testing and analysis to verify the software’s behavior during exception testing is recommended. 
+•	Check input data validity.  Checking reduces the probability of incorrect results, which could lead to further errors or even system crashes.  If the input can be “trusted”, then checking is not necessary. 
+•	Check the output data validity, if downstream input checking is not performed.  This reduces incorrect results, which can have mild to major effects on the software. 
+•	Control the use of built-in functions through project specific guidelines.  Built-in functions (usually in the language library) have unknown internal structure, limitations, precision, and exception handling.  Thoroughly test the functions that will be used, use a certified compiler, or review formal testing done on the compiler. 
+•	Use single purpose functions and procedures.  This facilitates review and maintenance of the code.   
+•	Use each variable for a single purpose only.  “Reusing” a variable (usually a local) makes the source code confusing to read and maintain.  If the variable is named properly for its original purpose, it will be misnamed for the new purpose. 
+•	If the hardware configuration may change, for this project or in the future, isolate hardware-dependent code. 
+•	Check for dead code.  Unreachable code may indicate an error.  It also causes confusion when reading the code. 
+•	Avoid large if-then-else and case statements.  Such statements are extremely difficult to debug, because code ends up having so many different paths.  The difference between best-case and worst-case execution time becomes significant.  Also, the difficulty of structured code coverage testing grows exponentially with the number of branches.
+•	Avoid implementing delays as no-ops or empty loops.  If this code is used on a different processor, or even the same processor running at a different rate (for example, a 25MHz vs. 33MHz CPU), the code may stop working or work incorrectly on the faster processor. 
+Important C
+•	Limit the number and size of parameters passed to routines.  Too many parameters affect readability and testability of the routine.  Large structures or arrays, if passed by value, can overflow the stack, causing unpredictable results.  Always pass large elements via pointers.
+•	Use recursive functions with great care.  Stack overflows are common.  Verify that there is a finite recursion! 
+•	Utilize functions for boundary checking.  Since C does not do this automatically, create routines that perform the same function.  Accessing arrays or strings out-ofbounds is a common problem with unpredictable, and often major, results. 
+•	Do not use the gets function, or related functions.  These do not have adequate limit checks.  Writing your own routine allows better error handling to be included.
+•	Use memmove, not memcpy.  Memcpy has problems if the memory overlaps. 
+•	Create wrappers for built-in functions to include error checking.
+•	If “if…else if…else if…” gets beyond two levels, use a switch…case instead.  This increases readability. 
+•	When using switch…case, always explicitly define default.  If a break is omitted, to allow flow from one case to another, explicitly document it. 
+•	Initialize local (automatic) variable.  They contain garbage before explicit initialization.  Pay special attention to pointers, since they can have the most dangerous effects. 
+•	Initialize global variables in a separate routine.  This ensures that variables are properly set at warm reboot. 
+•	Check pointers to make sure they don’t reference variables outside of scope.  Once a variable goes out of scope, what it contains is undefined. 
+•	Only use setjmp and longjmp for exception handling.  These commands jump outside function boundaries and deviate from normal control flow. 
+•	Avoid pointers to functions.  These pointers cannot be initialized and may point to non-executable code.  If they must be used, document the justification. 
+•	Prototype all functions and procedures!  This allows the compiler to catch errors, rather than having to debug them at run-time.  Also, when possible, use a tool or other method to verify that the prototype matches the function. 
+•	Minimize interface ambiguities, such as using expressions as parameters to subroutines, or changing the order of arguments between similar functions.  Also justify (and document) any use of functions with an indefinite number of arguments.  These functions cannot be checked by the compiler, and are difficult to verify. 
+•	Do no use ++ or – operators on parameters being passed to subroutines or macros.  These can create unexpected side effects. 
+•	Use bit masks instead of bit fields, which are implementation dependent. 
+•	Always explicitly cast variables.  This enforces stronger typing.  Casting pointers from one type to another should be justified and documented.
+•	Avoid the use of typedef’s for unsized arrays.  This feature is badly supported and error-prone.
+•	Avoid mixing signed and unsigned variables.  Use explicit casts when necessary. 
+•	Don’t compare floating point numbers to 0, or expect exact equality.  Allow some small differences due to the precision of floating point calculations. 
+•	Enable and read compiler warnings.  If an option, have warnings issued as errors.  Warnings indicate deviation that may be fine, but may also indicate a subtle error. 
+•	Be cautious if using standard library functions in a multitasking environment.  Library functions may not be re-entrant, and could lead to unspecified results. 
+•	Do not call functions within interrupt service routines.  If it is necessary to do so, make sure the functions are small and re-entrant. 
+•	Avoid the use of the ?: operator.  The operator makes the code more difficult to read.  Add comments explaining it, if it is used. 
+•	Place #include directives at the beginning of a file.  This makes it easier to know what files are actually included.  When tracing dependencies, this information is needed. 
+•	Use #define instead of numeric literals.  This allows the reader or maintainer to know what the number actually represents (RADIUS_OF_EARTH_IN_KM, instead of 6356.91).  It also allows the number to be changed in one place, if a change is necessitated later. 
+•	Do not make assumptions about the sizes of dependent types, such as int.  The size is often platform and compiler dependent. 
+•	Avoid using reserved words or library function names as variable names.  This could lead to serious errors.  Also, avoid using names that are close to standard names, to improve the readability of the source code.
+General design
+•	Implement CPU self test
+•	Fill ROM/RAM with predefined pattern to guard against illegal jump
+•	After power up do EEPROM test periodically
+•	Multiple copies of critical variables (ideally different storage media)
+•	Stack checks against overflow/corruption
+•	Program calc. checks
+•	No delays as empty loops!
+•	Don’t do fine grained optimization during first implementation
+•	No complex inter-component dependencies! Easier reuse.
+•	Error detection and handling should not be an afterthought but designed from the start.
+
+
+
+S.92
+
